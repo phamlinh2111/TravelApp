@@ -1,0 +1,43 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <RadioGroup
+        android:id="@+id/radioGroupSort"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RadioButton
+            android:id="@+id/radioSortName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tên (A → Z)" />
+
+        <RadioButton
+            android:id="@+id/radioSortProvince"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Lọc theo tỉnh" />
+
+        <RadioButton
+            android:id="@+id/radioSortRate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Rate (cao → thấp)" />
+
+        <RadioButton
+            android:id="@+id/radioSortPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Giá vé (cao → thấp)" />
+    </RadioGroup>
+
+    <Spinner
+        android:id="@+id/spinnerProvince"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_marginTop="8dp"/>
+</LinearLayout>
