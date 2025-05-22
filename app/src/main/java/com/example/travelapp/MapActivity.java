@@ -65,7 +65,6 @@ public class MapActivity extends AppCompatActivity {
                 double lat = place.getLatitude();
                 double lon = place.getLongitude();
                 if (lat == 0 && lon == 0) continue;
-
                 GeoPoint point = new GeoPoint(lat, lon);
                 Marker marker = new Marker(mapView);
                 marker.setPosition(point);
@@ -100,12 +99,12 @@ public class MapActivity extends AppCompatActivity {
             double userLat = gpsTracker.getLatitude();
             double userLon = gpsTracker.getLongitude();
 
-            // 🟢 Thêm marker vị trí người dùng
+            Log.d("USER_LOCATION", "Lat: " + userLat + ", Lon: " + userLon);
             GeoPoint userPoint = new GeoPoint(userLat, userLon);
             Marker userMarker = new Marker(mapView);
             userMarker.setPosition(userPoint);
             userMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
-            userMarker.setIcon(ContextCompat.getDrawable(this, R.drawable.person_pin)); // bạn cần ảnh này
+            userMarker.setIcon(ContextCompat.getDrawable(this, R.drawable.person_pin));
             userMarker.setTitle("Vị trí của bạn");
             mapView.getOverlays().add(userMarker);
             mapController.setCenter(userPoint);

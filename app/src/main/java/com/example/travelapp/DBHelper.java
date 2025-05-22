@@ -14,7 +14,7 @@ import java.util.List;
 
 public class DBHelper extends SQLiteOpenHelper {
     public DBHelper(Context context) {
-        super(context, "TravelData.db", null, 24);
+        super(context, "TravelData.db", null, 25);
     }
 
     @Override
@@ -176,6 +176,45 @@ public class DBHelper extends SQLiteOpenHelper {
 
         db.execSQL("INSERT INTO Places (id_province, Name, Rate, Description, Ticket_price, Time, Phone, Type, Latitude, Longitude) VALUES " +
                 "(34, 'Thung lũng Tình Yêu', 4.4, 'Khu du lịch thơ mộng tại Đà Lạt với hồ nước, vườn hoa và phong cảnh lãng mạn.', 25000, '07:00 - 17:00', '02633876567', 'Tham quan', 12.0021, 108.0123)");
+
+        db.execSQL("INSERT INTO Places (id_province, Name, Rate, Description, Ticket_price, Time, Phone, Type, Latitude, Longitude) VALUES " +
+                "(46, 'Đảo Lý Sơn', 4.5, 'Huyện đảo tiền tiêu với biển xanh và di tích lịch sử.', 0, '24/7', '', 'Thiên nhiên', 15.3833, 109.1167)");
+
+        db.execSQL("INSERT INTO Places (id_province, Name, Rate, Description, Ticket_price, Time, Phone, Type, Latitude, Longitude) VALUES " +
+                "(43, 'Gành Đá Dĩa', 4.6, 'Danh thắng với cấu trúc đá độc đáo hình lục giác.', 0, '06:00 - 18:00', '', 'Thiên nhiên', 13.9705, 109.2785)");
+
+        db.execSQL("INSERT INTO Places (id_province, Name, Rate, Description, Ticket_price, Time, Phone, Type, Latitude, Longitude) VALUES " +
+                "(11, 'Đền Đô', 4.4, 'Nơi thờ 8 vị vua triều Lý, di tích quốc gia đặc biệt.', 20000, '07:00 - 18:00', '', 'Văn hóa', 21.1542, 105.9953)");
+
+        db.execSQL("INSERT INTO Places (id_province, Name, Rate, Description, Ticket_price, Time, Phone, Type, Latitude, Longitude) VALUES " +
+                "(60, 'Tam Đảo', 4.7, 'Thị trấn trong mây, khí hậu mát mẻ quanh năm.', 0, '24/7', '', 'Thiên nhiên', 21.4556, 105.5944)");
+
+        db.execSQL("INSERT INTO Places (id_province, Name, Rate, Description, Ticket_price, Time, Phone, Type, Latitude, Longitude) VALUES " +
+                "(49, 'Chùa Dơi', 4.3, 'Ngôi chùa cổ nổi tiếng với đàn dơi hàng nghìn con.', 0, '06:00 - 18:00', '', 'Văn hóa', 9.6034, 105.9593)");
+
+        db.execSQL("INSERT INTO Places (id_province, Name, Rate, Description, Ticket_price, Time, Phone, Type, Latitude, Longitude) VALUES " +
+                "(63, 'Chiến trường Điện Biên Phủ', 4.8, 'Di tích chiến thắng lịch sử năm 1954.', 30000, '07:00 - 17:00', '', 'Lịch sử', 21.386, 103.023)");
+
+        db.execSQL("INSERT INTO Places (id_province, Name, Rate, Description, Ticket_price, Time, Phone, Type, Latitude, Longitude) VALUES " +
+                "(24, 'Biển Hồ', 4.5, 'Hồ nước ngọt giữa núi rừng Gia Lai, còn gọi là hồ T’Nưng.', 0, '24/7', '', 'Thiên nhiên', 13.9986, 108.0322)");
+
+        db.execSQL("INSERT INTO Places (id_province, Name, Rate, Description, Ticket_price, Time, Phone, Type, Latitude, Longitude) VALUES " +
+                "(25, 'Đèo Mã Pì Lèng', 4.9, 'Một trong tứ đại đỉnh đèo Việt Nam, hùng vĩ và hiểm trở.', 0, '24/7', '', 'Thiên nhiên', 23.2035, 105.4145)");
+
+        db.execSQL("INSERT INTO Places (id_province, Name, Rate, Description, Ticket_price, Time, Phone, Type, Latitude, Longitude) VALUES " +
+                "(22, 'Khu du lịch Bửu Long', 4.2, 'Khu sinh thái nổi bật với núi đá và hồ nước.', 120000, '07:00 - 17:00', '', 'Giải trí', 10.9514, 106.8282)");
+
+        db.execSQL("INSERT INTO Places (id_province, Name, Rate, Description, Ticket_price, Time, Phone, Type, Latitude, Longitude) VALUES " +
+                "(13, 'Đại Nam Văn Hiến', 4.3, 'Khu du lịch tổng hợp lớn nhất Việt Nam.', 200000, '08:00 - 17:00', '', 'Giải trí', 11.0896, 106.6626)");
+
+        db.execSQL("INSERT INTO Places (id_province, Name, Rate, Description, Ticket_price, Time, Phone, Type, Latitude, Longitude) VALUES " +
+                "(51, 'Núi Bà Đen', 4.6, 'Nóc nhà Nam Bộ với cáp treo và chùa Bà.', 0, '06:00 - 18:00', '', 'Thiên nhiên', 11.3604, 106.1389)");
+
+        db.execSQL("INSERT INTO Places (id_province, Name, Rate, Description, Ticket_price, Time, Phone, Type, Latitude, Longitude) VALUES " +
+                "(37, 'Làng nổi Tân Lập', 4.4, 'Khám phá rừng tràm bằng xuồng hoặc đi bộ qua cầu.', 100000, '07:00 - 17:00', '', 'Thiên nhiên', 10.5461, 105.7702)");
+
+        db.execSQL("INSERT INTO Places (id_province, Name, Rate, Description, Ticket_price, Time, Phone, Type, Latitude, Longitude) VALUES " +
+                "(56, 'Chợ nổi Cái Bè', 4.2, 'Chợ nổi nổi tiếng trên sông Tiền, hoạt động từ sáng sớm.', 0, '05:00 - 10:00', '', 'Văn hóa', 10.4071, 105.9575)");
 
 
         db.execSQL("INSERT INTO Image (id_place, url, caption) VALUES " +
