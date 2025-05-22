@@ -10,8 +10,11 @@ public class Place {
     private String time;
     private String phone;
     private String type;
+    private double latitude;
+    private double longitude;
 
-    public Place(int idPlace, int idProvince, String name, double rate, String description, int ticketPrice, String time, String phone, String type) {
+    public Place(int idPlace, int idProvince, String name, double rate, String description, int ticketPrice,
+                 String time, String phone, String type, double latitude, double longitude) {
         this.idPlace = idPlace;
         this.idProvince = idProvince;
         this.name = name;
@@ -21,6 +24,8 @@ public class Place {
         this.time = time;
         this.phone = phone;
         this.type = type;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 
     // Getter methods
@@ -60,6 +65,14 @@ public class Place {
         return type;
     }
 
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
     // Setter methods
     public void setIdPlace(int idPlace) {
         this.idPlace = idPlace;
@@ -95,5 +108,13 @@ public class Place {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
     }
 }

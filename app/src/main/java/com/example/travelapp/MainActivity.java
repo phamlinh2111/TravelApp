@@ -2,6 +2,7 @@ package com.example.travelapp;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
@@ -11,7 +12,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -25,32 +25,44 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
     DBHelper dbHelper;
     RecyclerView recyclerView;
-    private PlaceAdapter placeAdapter;
     private PlaceAdapter adapter;
     private List<Place> placeList;
     private List<Province> provinces;
     private List<Image> imageList;
-    private String loggedInUsername = "admin1";
-    private String loggedInPassword = "admin123";
+
+    private String loggedInUsername;
+    private String loggedInPassword;
+    private boolean isAdmin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().getDecorView().setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+        );
+        // Ẩn luôn action bar nếu còn
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }
         setContentView(R.layout.activity_main);
 
         dbHelper = new DBHelper(this);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
+        SharedPreferences preferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        loggedInUsername = preferences.getString("username", "");
+        loggedInPassword = preferences.getString("password", "");
+        this.isAdmin = preferences.getBoolean("isAdmin", false);
+
+
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        // Lấy dữ liệu từ DB
         placeList = dbHelper.getAllPlaces();
         provinces = dbHelper.getAllProvinces();
         imageList = dbHelper.getAllImages();
 
-        // Khởi tạo adapter
-        adapter = new PlaceAdapter(this, placeList, provinces, imageList,
+        adapter = new PlaceAdapter(this, placeList, provinces, imageList, isAdmin,
                 new PlaceAdapter.OnPlaceActionListener() {
                     @Override
                     public void onEditPlace(Place place) {
@@ -61,17 +73,23 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onDeletePlace(Place place) {
-                        dbHelper.deletePlace(place.getIdPlace());
-                        reloadData();
+                        new AlertDialog.Builder(MainActivity.this)
+                                .setTitle("Xác nhận xóa")
+                                .setMessage("Bạn có chắc chắn muốn xóa địa điểm này?")
+                                .setPositiveButton("Xóa", (dialog, which) -> {
+                                    dbHelper.deletePlace(place.getIdPlace());
+                                    reloadData();
+                                })
+                                .setNegativeButton("Hủy", null)
+                                .show();
                     }
-                }
-        );
+
+                });
 
         recyclerView.setAdapter(adapter);
 
         EditText searchEditText = findViewById(R.id.editSearch);
         Button searchButton = findViewById(R.id.btnSearch);
-
         searchButton.setOnClickListener(v -> {
             String query = searchEditText.getText().toString().trim();
             adapter.filter(query);
@@ -81,16 +99,43 @@ public class MainActivity extends AppCompatActivity {
         imgFilter.setOnClickListener(v -> showSortFilterDialog());
 
         Button btnAdd = findViewById(R.id.btnAdd);
-        if (dbHelper.isAdmin(loggedInUsername, loggedInPassword)) {
+        if (isAdmin) {
             btnAdd.setVisibility(View.VISIBLE);
         } else {
             btnAdd.setVisibility(View.GONE);
         }
 
         btnAdd.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, AddPlaceActivity.class);
+            Intent addIntent = new Intent(MainActivity.this, AddPlaceActivity.class);
+            startActivity(addIntent);
+        });
+
+        Button btnMap = findViewById(R.id.btnMap);
+        btnMap.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, MapActivity.class);
             startActivity(intent);
         });
+
+
+        ImageView iconLogout = findViewById(R.id.iconLogout);
+        iconLogout.setOnClickListener(v -> {
+            new AlertDialog.Builder(MainActivity.this)
+                    .setTitle("Đăng xuất")
+                    .setMessage("Bạn có chắc chắn muốn đăng xuất?")
+                    .setPositiveButton("Đăng xuất", (dialog, which) -> {
+                        SharedPreferences.Editor editor = preferences.edit();
+                        editor.clear();
+                        editor.apply();
+
+                        Intent logout_intent = new Intent(MainActivity.this, LoginActivity.class);
+                        logout_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(logout_intent);
+                        finish();
+                    })
+                    .setNegativeButton("Hủy", null)
+                    .show();
+        });
+
     }
 
     @Override
@@ -102,11 +147,9 @@ public class MainActivity extends AppCompatActivity {
     private void reloadData() {
         List<Place> updatedPlaces = dbHelper.getAllPlaces();
         List<Province> updatedProvinces = dbHelper.getAllProvinces();
-        List<Image> updatedImages = dbHelper.getAllImages(); // Cập nhật imageList mới
-
+        List<Image> updatedImages = dbHelper.getAllImages();
         adapter.updateData(updatedPlaces, updatedProvinces, updatedImages);
     }
-
 
     private String getProvinceNameById(int idProvince) {
         for (Province province : provinces) {
@@ -140,7 +183,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
         builder.setView(view);
-
         builder.setPositiveButton("Áp dụng", (dialog, which) -> {
             int checkedId = radioGroup.getCheckedRadioButtonId();
             List<Place> modifiedList = new ArrayList<>(placeList);
@@ -162,5 +204,4 @@ public class MainActivity extends AppCompatActivity {
         builder.setNegativeButton("Hủy", null);
         builder.show();
     }
-
 }

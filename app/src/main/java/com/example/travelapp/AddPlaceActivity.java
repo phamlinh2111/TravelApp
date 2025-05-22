@@ -30,7 +30,7 @@ public class AddPlaceActivity extends AppCompatActivity {
     private static final String CLOUD_NAME = "dkfzkpsmn";
     private static final String UPLOAD_PRESET = "travel_upload_preset";
 
-    EditText edtName, edtDescription, edtTicketPrice, edtRate, edtTime, edtPhone, edtType;
+    EditText edtName, edtDescription, edtTicketPrice, edtRate, edtTime, edtPhone, edtType, edtLatitude, edtLongitude;
     Spinner spinnerProvince;
     Button btnSave, btnSelectImages;
     DBHelper dbHelper;
@@ -50,6 +50,8 @@ public class AddPlaceActivity extends AppCompatActivity {
         edtTime = findViewById(R.id.edtTime);
         edtPhone = findViewById(R.id.edtPhone);
         edtType = findViewById(R.id.edtType);
+        edtLatitude = findViewById(R.id.edtLatitude);
+        edtLongitude = findViewById(R.id.edtLongitude);
         spinnerProvince = findViewById(R.id.spinnerProvince);
         btnSave = findViewById(R.id.btnSave);
         btnSelectImages = findViewById(R.id.btnSelectImages);
@@ -80,6 +82,12 @@ public class AddPlaceActivity extends AppCompatActivity {
             String time = edtTime.getText().toString().trim();
             String phone = edtPhone.getText().toString().trim();
             String type = edtType.getText().toString().trim();
+            String latStr = edtLatitude.getText().toString().trim();
+            String lngStr = edtLongitude.getText().toString().trim();
+
+            double latitude = latStr.isEmpty() ? 0 : Double.parseDouble(latStr);
+            double longitude = lngStr.isEmpty() ? 0 : Double.parseDouble(lngStr);
+
 
             if (name.isEmpty() || desc.isEmpty()) {
                 Toast.makeText(this, "Vui lòng nhập tên và mô tả!", Toast.LENGTH_SHORT).show();
@@ -90,7 +98,7 @@ public class AddPlaceActivity extends AppCompatActivity {
             double rate = rateStr.isEmpty() ? 0 : Double.parseDouble(rateStr);
             int provinceId = provinceList.get(spinnerProvince.getSelectedItemPosition()).getId();
 
-            Place place = new Place(0, provinceId, name, rate, desc, ticket, time, phone, type);
+            Place place = new Place(0, provinceId, name, rate, desc, ticket, time, phone, type, latitude, longitude);
             long placeId = dbHelper.addPlace(place);
 
             if (placeId != -1) {
@@ -166,7 +174,7 @@ public class AddPlaceActivity extends AppCompatActivity {
             btnRemove.setPadding(10, 10, 10, 10);
             btnRemove.setImageResource(R.drawable.close);
             btnRemove.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-            btnRemove.setElevation(8f); // bóng nổi nếu API >= 21
+            btnRemove.setElevation(8f);
 
             btnRemove.setOnClickListener(v -> {
                 selectedImageUris.remove(uri);

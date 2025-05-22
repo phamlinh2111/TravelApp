@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/loginCard"
+    android:layout_gravity="center"
+    android:layout_marginTop="20dp"
+    android:layout_marginBottom="20dp"
+    android:background="@drawable/login_button_bk"
+    android:elevation="5dp"
+    app:cardCornerRadius="20dp">
+
+    <LinearLayout
+        style="@style/linearParent"
+        android:layout_gravity="center"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <TextView
+            style="@style/headerTextPrimary"
+            android:layout_marginTop="20dp"
+            android:textSize="24sp"
+            android:text="Register" />
+
+        <!-- Username -->
+        <TextView
+            style="@style/viewParent"
+            android:layout_marginTop="20dp"
+            android:text="Username"
+            android:textColor="@color/primaryTextColor"
+            android:textSize="18sp" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputUsername"
+            style="@style/parent">
+
+            <EditText
+                android:id="@+id/editTextUsername"
+                style="@style/modifiedEditText"
+                android:textSize="18sp"
+                android:inputType="text"
+                android:maxLines="1" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Password -->
+        <TextView
+            style="@style/viewParent"
+            android:layout_marginTop="20dp"
+            android:text="Password"
+            android:textColor="@color/primaryTextColor"
+            android:textSize="18sp" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputPassword"
+            style="@style/parent">
+
+            <EditText
+                android:id="@+id/editTextPassword"
+                style="@style/modifiedEditText"
+                android:inputType="textPassword"
+                android:textSize="18sp"
+                android:maxLines="1" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Phone -->
+        <TextView
+            style="@style/viewParent"
+            android:layout_marginTop="20dp"
+            android:text="Phone Number"
+            android:textColor="@color/primaryTextColor"
+            android:textSize="18sp" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputPhone"
+            style="@style/parent">
+
+            <EditText
+                android:id="@+id/editTextPhone"
+                style="@style/modifiedEditText"
+                android:inputType="phone"
+                android:textSize="18sp"
+                android:maxLines="1" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Register Button -->
+        <Button
+            android:id="@+id/btnRegister"
+            style="@style/loginButton"
+            android:backgroundTint="@null"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp"
+            android:textSize="18sp"
+            android:text="Register" />
+
+        <!-- Login Link -->
+        <TextView
+            style="@style/parent"
+            android:layout_marginTop="20dp"
+            android:onClick="viewLoginClicked"
+            android:text="Already have an account? Login"
+            android:textSize="16sp"
+            android:textAlignment="center"
+            android:textColor="@color/primaryTextColor"
+            android:textStyle="bold" />
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

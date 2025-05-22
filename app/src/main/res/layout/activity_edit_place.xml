@@ -16,7 +16,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Chỉnh sửa địa điểm"
-            android:textColor="@android:color/black"
+            android:textColor="#2196F3"
             android:textSize="24sp"
             android:textStyle="bold" />
 
@@ -24,12 +24,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Tên địa điểm"
-            android:textSize="16sp"
+            android:textColor="@color/primaryTextColor"
+            android:textSize="18sp"
             android:layout_marginTop="8dp" />
         <EditText
             android:id="@+id/edtPlaceName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textSize="18sp"
             android:hint="Nhập tên địa điểm" />
 
         <!-- Mô tả -->
@@ -37,26 +39,63 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Mô tả"
-            android:textSize="16sp"
+            android:textColor="@color/primaryTextColor"
+            android:textSize="18sp"
             android:layout_marginTop="8dp" />
         <EditText
             android:id="@+id/edtDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textSize="18sp"
             android:hint="Nhập mô tả" />
+
+        <!-- Vĩ độ -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Vĩ độ"
+            android:textColor="@color/primaryTextColor"
+            android:textSize="18sp"
+            android:layout_marginTop="8dp" />
+        <EditText
+            android:id="@+id/edtLatitude"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Nhập vĩ độ"
+            android:textSize="18sp"
+            android:inputType="numberDecimal" />
+
+        <!-- Kinh độ -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Kinh độ"
+            android:textColor="@color/primaryTextColor"
+            android:textSize="18sp"
+            android:layout_marginTop="8dp" />
+        <EditText
+            android:id="@+id/edtLongitude"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Nhập kinh độ"
+            android:textSize="18sp"
+            android:inputType="numberDecimal" />
+
 
         <!-- Giá vé -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Giá vé"
-            android:textSize="16sp"
+            android:textColor="@color/primaryTextColor"
+            android:textSize="18sp"
             android:layout_marginTop="8dp" />
         <EditText
             android:id="@+id/edtTicketPrice"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Nhập giá vé"
+            android:textSize="18sp"
             android:inputType="number" />
 
         <!-- Đánh giá -->
@@ -64,13 +103,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Đánh giá (0-5)"
-            android:textSize="16sp"
+            android:textSize="18sp"
+            android:textColor="@color/primaryTextColor"
             android:layout_marginTop="8dp" />
         <EditText
             android:id="@+id/edtRate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Nhập đánh giá"
+            android:textSize="18sp"
             android:inputType="numberDecimal" />
 
         <!-- Thời gian mở cửa -->
@@ -78,12 +119,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Thời gian mở cửa"
-            android:textSize="16sp"
+            android:textColor="@color/primaryTextColor"
+            android:textSize="18sp"
             android:layout_marginTop="8dp" />
         <EditText
             android:id="@+id/edtTime"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textSize="18sp"
             android:hint="Ví dụ: 8:00 - 17:00" />
 
         <!-- Số điện thoại -->
@@ -91,12 +134,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Số điện thoại"
-            android:textSize="16sp"
+            android:textColor="@color/primaryTextColor"
+            android:textSize="18sp"
             android:layout_marginTop="8dp" />
         <EditText
             android:id="@+id/edtPhone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textSize="18sp"
             android:hint="Nhập số điện thoại"
             android:inputType="phone" />
 
@@ -105,12 +150,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Loại hình"
-            android:textSize="16sp"
+            android:textColor="@color/primaryTextColor"
+            android:textSize="18sp"
             android:layout_marginTop="8dp" />
         <EditText
             android:id="@+id/edtType"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textSize="18sp"
             android:hint="Ví dụ: Du lịch, Văn hóa, Ẩm thực..." />
 
         <!-- Tỉnh thành -->
@@ -118,20 +165,24 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Tỉnh/Thành phố"
-            android:textSize="16sp"
+            android:textColor="@color/primaryTextColor"
+            android:textSize="18sp"
             android:layout_marginTop="8dp" />
         <Spinner
             android:id="@+id/spinnerProvince"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
+
         <!-- Nút chọn ảnh -->
         <Button
             android:id="@+id/btnSelectImages"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="35dp"
             android:text="Chọn ảnh từ thư viện"
-            android:layout_marginTop="16dp" />
+            android:textColor="@android:color/white"
+            android:background="@drawable/button"
+            android:layout_marginTop="10dp" />
 
         <!-- Hiển thị ảnh đã chọn -->
         <HorizontalScrollView
@@ -150,9 +201,9 @@
         <Button
             android:id="@+id/btnSave"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="35dp"
             android:text="Lưu địa điểm"
-            android:backgroundTint="@android:color/holo_green_dark"
+            android:background="@drawable/button"
             android:textColor="@android:color/white"
             android:textStyle="bold"
             android:layout_marginTop="16dp"

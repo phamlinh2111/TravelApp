@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -56,6 +57,8 @@ public class PlaceDetailActivity extends AppCompatActivity {
         txtPhone.setText("Liên hệ: " + phone);
         txtType.setText("Loại hình: " + type);
 
+        ImageButton btnBack = findViewById(R.id.btnBack);
+        btnBack.setOnClickListener(v -> finish());
 
         DBHelper dbHelper = new DBHelper(this);
         imageList = new ArrayList<>(dbHelper.getImagesForPlace(idPlace));

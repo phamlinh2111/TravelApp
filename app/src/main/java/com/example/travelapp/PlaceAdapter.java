@@ -27,14 +27,16 @@ public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.ViewHolder> 
     private List<Province> provinces;
     private List<Image> imageList;
     private OnPlaceActionListener listener;
+    private boolean isAdmin;
 
-    public PlaceAdapter(Context context, List<Place> places, List<Province> provinces, List<Image> images, OnPlaceActionListener listener) {
+    public PlaceAdapter(Context context, List<Place> places, List<Province> provinces, List<Image> images, boolean isAdmin, OnPlaceActionListener listener) {
         this.context = context;
         this.placeList = places;
         this.placeListFull = new ArrayList<>(places);
         this.provinces = provinces;
         this.imageList = images;
         this.listener = listener;
+        this.isAdmin = isAdmin;
     }
 
     @NonNull
@@ -49,7 +51,6 @@ public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.ViewHolder> 
         Place place = placeList.get(position);
         holder.tvName.setText(place.getName());
 
-        // Tìm tên tỉnh theo idProvince
         String provinceName = "";
         for (Province p : provinces) {
             if (p.getId() == place.getIdProvince()) {
@@ -58,7 +59,6 @@ public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.ViewHolder> 
             }
         }
 
-        // Lấy ảnh từ imageList dựa trên idPlace
         String imageUrl = getImageUrlForPlace(place.getIdPlace());
         if (imageUrl != null && !imageUrl.isEmpty()) {
             Glide.with(holder.itemView.getContext())
@@ -67,17 +67,16 @@ public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.ViewHolder> 
         }
 
         holder.tvProvince.setText(provinceName);
-        holder.tvTicketPrice.setText("Giá vé: " + place.getTicketPrice() + " VND");
-        holder.tvTime.setText("Thời gian: " + place.getTime());
+        holder.tvTicketPrice.setText(place.getTicketPrice() + " VND");
+        holder.tvTime.setText(place.getTime());
 
-        // Click item -> Mở chi tiết
         String finalProvinceName = provinceName;
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(v.getContext(), PlaceDetailActivity.class);
             intent.putExtra("id_place", place.getIdPlace());
             intent.putExtra("name", place.getName());
             intent.putExtra("province", finalProvinceName);
-            intent.putExtra("ticket", (int) place.getTicketPrice());
+            intent.putExtra("ticket", place.getTicketPrice());
             intent.putExtra("time", place.getTime());
             intent.putExtra("image", imageUrl);
             intent.putExtra("rate", place.getRate());
@@ -87,34 +86,35 @@ public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.ViewHolder> 
             v.getContext().startActivity(intent);
         });
 
-        // Hiển thị popup menu (Sửa/Xóa)
-        holder.imgMore.setOnClickListener(v -> {
-            PopupMenu popup = new PopupMenu(context, holder.imgMore);
-            MenuInflater inflater = popup.getMenuInflater();
-            inflater.inflate(R.menu.menu_place_options, popup.getMenu());
+        if (!isAdmin) {
+            holder.imgMore.setVisibility(View.GONE);
+        } else {
+            holder.imgMore.setVisibility(View.VISIBLE);
+            holder.imgMore.setOnClickListener(v -> {
+                PopupMenu popup = new PopupMenu(context, holder.imgMore);
+                MenuInflater inflater = popup.getMenuInflater();
+                inflater.inflate(R.menu.menu_place_options, popup.getMenu());
 
-            popup.setOnMenuItemClickListener(item -> {
-                if (listener == null) return false;
+                popup.setOnMenuItemClickListener(item -> {
+                    if (listener == null) return false;
+                    Place selectedPlace = placeList.get(holder.getAdapterPosition());
 
-                Place selectedPlace = placeList.get(holder.getAdapterPosition());
-                int id = item.getItemId();
+                    if (item.getItemId() == R.id.menu_edit) {
+                        listener.onEditPlace(selectedPlace);
+                        return true;
+                    } else if (item.getItemId() == R.id.menu_delete) {
+                        listener.onDeletePlace(selectedPlace);
+                        return true;
+                    }
 
-                if (id == R.id.menu_edit) {
-                    listener.onEditPlace(selectedPlace);
-                    return true;
-                } else if (id == R.id.menu_delete) {
-                    listener.onDeletePlace(selectedPlace);
-                    return true;
-                }
+                    return false;
+                });
 
-                return false;
+                popup.show();
             });
-
-            popup.show();
-        });
+        }
     }
 
-    // Lấy đường dẫn ảnh từ idPlace
     private String getImageUrlForPlace(int idPlace) {
         for (Image image : imageList) {
             if (image.getIdPlace() == idPlace) {
@@ -129,7 +129,6 @@ public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.ViewHolder> 
         return placeList.size();
     }
 
-    // Lọc theo tên địa điểm
     public void filter(String query) {
         if (query.isEmpty()) {
             placeList.clear();
@@ -147,7 +146,6 @@ public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.ViewHolder> 
         notifyDataSetChanged();
     }
 
-    // Cập nhật danh sách mới
     public void updateList(List<Place> newList) {
         this.placeList = newList;
         this.placeListFull = new ArrayList<>(newList);
@@ -162,7 +160,6 @@ public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.ViewHolder> 
         notifyDataSetChanged();
     }
 
-    // ViewHolder chứa các thành phần hiển thị
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView tvName, tvProvince, tvTicketPrice, tvTime;
         ImageView imgPlace, imgMore;
@@ -174,15 +171,12 @@ public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.ViewHolder> 
             tvProvince = itemView.findViewById(R.id.txtProvince);
             tvTicketPrice = itemView.findViewById(R.id.txtTicketPrice);
             tvTime = itemView.findViewById(R.id.txtTime);
-            imgMore = itemView.findViewById(R.id.imgMore); // Icon 3 chấm
+            imgMore = itemView.findViewById(R.id.imgMore);
         }
     }
 
-    // Interface callback cho hành động Sửa/Xóa
     public interface OnPlaceActionListener {
         void onEditPlace(Place place);
         void onDeletePlace(Place place);
     }
-
-
 }

@@ -13,24 +13,28 @@
             android:id="@+id/radioSortName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textSize="18sp"
             android:text="Tên (A → Z)" />
 
         <RadioButton
             android:id="@+id/radioSortProvince"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textSize="18sp"
             android:text="Lọc theo tỉnh" />
 
         <RadioButton
             android:id="@+id/radioSortRate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textSize="18sp"
             android:text="Rate (cao → thấp)" />
 
         <RadioButton
             android:id="@+id/radioSortPrice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textSize="18sp"
             android:text="Giá vé (cao → thấp)" />
     </RadioGroup>
 

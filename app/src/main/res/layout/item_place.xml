@@ -4,14 +4,18 @@
     android:orientation="horizontal"
     android:padding="4dp"
     android:background="#EEEEEE"
+    android:id="@+id/rootItemPlace"
+    android:clickable="true"
+    android:focusable="true"
     android:layout_margin="2dp">
 
     <!-- Thêm ảnh ở bên trái -->
     <ImageView
         android:id="@+id/imgPlace"
-        android:layout_width="130dp"
+        android:layout_width="140dp"
         android:layout_height="100dp"
         android:scaleType="centerCrop"
+        android:layout_marginTop="2dp"
         android:layout_marginEnd="4dp" />
 
 
@@ -28,17 +32,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Tên địa điểm"
-            android:textSize="24sp"
+            android:textColor="@color/primaryTextColor"
+            android:textSize="20sp"
             android:textStyle="bold" />
 
         <TextView
             android:id="@+id/txtProvince"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Tỉnh"
-            android:textSize="16sp"
             android:drawableLeft="@drawable/location"
-            android:paddingLeft="10dp"/>
+            android:paddingLeft="10dp"
+            android:text="Tỉnh"
+            android:textSize="16sp" />
 
 
         <!-- Thêm Giá vé -->
@@ -46,22 +51,23 @@
             android:id="@+id/txtTicketPrice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Giá vé: 50000 VND"
-            android:textSize="16sp"
             android:drawableLeft="@drawable/money"
             android:paddingLeft="10dp"
-            android:paddingTop="5dp"/>
+            android:paddingTop="5dp"
+            android:text="50000 VND"
+            android:textSize="16sp" />
 
         <!-- Thêm Thời gian -->
         <TextView
             android:id="@+id/txtTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Mở cửa: 08:00 - 18:00"
-            android:textSize="16sp"
             android:drawableLeft="@drawable/schedule"
             android:paddingLeft="10dp"
-            android:paddingTop="5dp"/>
+            android:paddingTop="5dp"
+            android:text="08:00 - 18:00"
+            android:textSize="16sp" />
+
     </LinearLayout>
 
     <ImageView
@@ -69,7 +75,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/more"
+        android:visibility="gone"
         android:layout_alignParentEnd="true"
         android:contentDescription="More options"
         android:paddingTop="8dp" />
+
 </LinearLayout>

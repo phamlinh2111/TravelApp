@@ -2,6 +2,7 @@ package com.example.travelapp;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -13,7 +14,7 @@ import java.util.List;
 
 public class DBHelper extends SQLiteOpenHelper {
     public DBHelper(Context context) {
-        super(context, "TravelData.db", null, 19);
+        super(context, "TravelData.db", null, 24);
     }
 
     @Override
@@ -34,7 +35,10 @@ public class DBHelper extends SQLiteOpenHelper {
                 "Time TEXT, " +
                 "Phone TEXT, " +
                 "Type TEXT, " +
+                "Latitude REAL, " +
+                "Longitude REAL, " +
                 "FOREIGN KEY (id_province) REFERENCES Province(id_province))");
+
 
         // Tạo bảng Image
         db.execSQL("CREATE TABLE Image (" +
@@ -44,21 +48,12 @@ public class DBHelper extends SQLiteOpenHelper {
                 "caption TEXT, " +
                 "FOREIGN KEY (id_place) REFERENCES Places(id_place))");
 
-        // Tạo bảng Notice
-        db.execSQL("CREATE TABLE Notice (" +
-                "id_notice INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                "id_place INTEGER, " +
-                "notice_content TEXT, " +
-                "send_time TEXT, " +
-                "title TEXT, " +
-                "FOREIGN KEY (id_place) REFERENCES Places(id_place))");
-
         // Tạo bảng User
         db.execSQL("CREATE TABLE User (" +
                 "id_user INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "username TEXT NOT NULL, " +
                 "password TEXT NOT NULL, " +
-                "email TEXT)");
+                "phone TEXT)");
 
         // Tạo bảng Admin
         db.execSQL("CREATE TABLE Admin (" +
@@ -74,43 +69,6 @@ public class DBHelper extends SQLiteOpenHelper {
                 "PRIMARY KEY (id_admin, id_user), " +
                 "FOREIGN KEY (id_admin) REFERENCES Admin(id_admin), " +
                 "FOREIGN KEY (id_user) REFERENCES User(id_user))");
-
-        // Tạo bảng Comment
-        db.execSQL("CREATE TABLE Comment (" +
-                "id_comment INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                "id_user INTEGER, " +
-                "id_place INTEGER, " +
-                "Rate REAL, " +
-                "Content TEXT, " +
-                "FOREIGN KEY (id_user) REFERENCES User(id_user), " +
-                "FOREIGN KEY (id_place) REFERENCES Places(id_place))");
-
-        // Tạo bảng Visited
-        db.execSQL("CREATE TABLE Visited (" +
-                "id_visited INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                "id_user INTEGER, " +
-                "id_place INTEGER, " +
-                "date TEXT, " +
-                "FOREIGN KEY (id_user) REFERENCES User(id_user), " +
-                "FOREIGN KEY (id_place) REFERENCES Places(id_place))");
-
-        // Tạo bảng MuaVe
-        db.execSQL("CREATE TABLE MuaVe (" +
-                "id_mua_ve INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                "id_user INTEGER, " +
-                "id_place INTEGER, " +
-                "ngay_mua TEXT, " +
-                "FOREIGN KEY (id_user) REFERENCES User(id_user), " +
-                "FOREIGN KEY (id_place) REFERENCES Places(id_place))");
-
-        // Tạo bảng Favorite
-        db.execSQL("CREATE TABLE Favorite (" +
-                "id_favorite INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                "id_user INTEGER, " +
-                "id_place INTEGER, " +
-                "ngay_du_dinh_di TEXT, " +
-                "FOREIGN KEY (id_user) REFERENCES User(id_user), " +
-                "FOREIGN KEY (id_place) REFERENCES Places(id_place))");
 
 
         db.execSQL("INSERT INTO Province (id_province, name) VALUES (1, 'Hà Nội')");
@@ -177,30 +135,48 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL("INSERT INTO Province (id_province, name) VALUES (62, 'Hậu Giang')");
         db.execSQL("INSERT INTO Province (id_province, name) VALUES (63, 'Điện Biên')");
 
-        // Câu lệnh INSERT có giá trị cho id_place
-        db.execSQL("INSERT INTO Places (id_province, Name, Rate, Description, Ticket_price, Time, Phone, Type) VALUES " +
-                "(2, 'Chợ Bến Thành', 4.5, 'Chợ Bến Thành là biểu tượng văn hóa, thương mại lâu đời của TP. Hồ Chí Minh, nổi tiếng với các gian hàng đặc sản, quà lưu niệm và ẩm thực phong phú.', 50000, '08:00 - 18:00', '0901234567', 'Shopping')");
+        db.execSQL("INSERT INTO Places (id_province, Name, Rate, Description, Ticket_price, Time, Phone, Type, Latitude, Longitude) VALUES " +
+                "(2, 'Chợ Bến Thành', 4.5, 'Chợ Bến Thành là biểu tượng văn hóa, thương mại lâu đời của TP. Hồ Chí Minh, nổi tiếng với các gian hàng đặc sản, quà lưu niệm và ẩm thực phong phú.', 50000, '08:00 - 18:00', '0901234567', 'Mua sắm', 10.7721, 106.6983)");
 
-        db.execSQL("INSERT INTO Places (id_province, Name, Rate, Description, Ticket_price, Time, Phone, Type) VALUES " +
-                "(1, 'Hồ Hoàn Kiếm', 4.7, 'Hồ Hoàn Kiếm là trái tim của Hà Nội, gắn liền với truyền thuyết vua Lê Lợi trả gươm, bao quanh bởi các công trình cổ kính và không gian tản bộ lý tưởng.', 0, '24/7', '0902345678', 'Sightseeing')");
+        db.execSQL("INSERT INTO Places (id_province, Name, Rate, Description, Ticket_price, Time, Phone, Type, Latitude, Longitude) VALUES " +
+                "(1, 'Hồ Hoàn Kiếm', 4.7, 'Hồ Hoàn Kiếm là trái tim của Hà Nội, gắn liền với truyền thuyết vua Lê Lợi trả gươm, bao quanh bởi các công trình cổ kính và không gian tản bộ lý tưởng.', 0, '24/7', '0902345678', 'Tham quan', 21.0285, 105.8542)");
 
-        db.execSQL("INSERT INTO Places (id_province, Name, Rate, Description, Ticket_price, Time, Phone, Type) VALUES " +
-                "(3, 'Bà Nà Hills', 4.8, 'Bà Nà Hills là khu du lịch nổi tiếng với khí hậu mát mẻ quanh năm, sở hữu Cầu Vàng độc đáo, làng Pháp cổ kính, và hệ thống cáp treo đạt kỷ lục thế giới.', 700000, '08:00 - 20:00', '0903456789', 'Amusement')");
+        db.execSQL("INSERT INTO Places (id_province, Name, Rate, Description, Ticket_price, Time, Phone, Type, Latitude, Longitude) VALUES " +
+                "(3, 'Bà Nà Hills', 4.8, 'Bà Nà Hills là khu du lịch nổi tiếng với khí hậu mát mẻ quanh năm, sở hữu Cầu Vàng độc đáo, làng Pháp cổ kính, và hệ thống cáp treo đạt kỷ lục thế giới.', 700000, '08:00 - 20:00', '0903456789', 'Giải trí', 15.9957, 107.9964)");
 
-        db.execSQL("INSERT INTO Places (id_province, Name, Rate, Description, Ticket_price, Time, Phone, Type) VALUES " +
-                "(1, 'Văn Miếu Quốc Tử Giám', 4.6, 'Văn Miếu là trường đại học đầu tiên của Việt Nam, nơi lưu giữ giá trị lịch sử giáo dục và là địa điểm lý tưởng để tìm hiểu về Nho học và kiến trúc cổ.', 30000, '07:30 - 17:30', '0904567890', 'Cultural')");
+        db.execSQL("INSERT INTO Places (id_province, Name, Rate, Description, Ticket_price, Time, Phone, Type, Latitude, Longitude) VALUES " +
+                "(1, 'Văn Miếu Quốc Tử Giám', 4.6, 'Văn Miếu là trường đại học đầu tiên của Việt Nam, nơi lưu giữ giá trị lịch sử giáo dục và là địa điểm lý tưởng để tìm hiểu về Nho học và kiến trúc cổ.', 30000, '07:30 - 17:30', '0904567890', 'Văn hóa', 21.0283, 105.8350)");
 
-        db.execSQL("INSERT INTO Places (id_province, Name, Rate, Description, Ticket_price, Time, Phone, Type) VALUES " +
-                "(2, 'Nhà thờ Đức Bà', 4.4, 'Nhà thờ Đức Bà là công trình kiến trúc cổ điển mang phong cách Pháp, tọa lạc giữa trung tâm Quận 1, là điểm đến thu hút du khách và tín đồ Công giáo.', 0, '06:00 - 19:00', '0905678901', 'Sightseeing')");
+        db.execSQL("INSERT INTO Places (id_province, Name, Rate, Description, Ticket_price, Time, Phone, Type, Latitude, Longitude) VALUES " +
+                "(2, 'Nhà thờ Đức Bà', 4.4, 'Nhà thờ Đức Bà là công trình kiến trúc cổ điển mang phong cách Pháp, tọa lạc giữa trung tâm Quận 1, là điểm đến thu hút du khách và tín đồ Công giáo.', 0, '06:00 - 19:00', '0905678901', 'Tham quan', 10.7798, 106.6992)");
 
-        db.execSQL("INSERT INTO Places (id_province, Name, Rate, Description, Ticket_price, Time, Phone, Type) VALUES " +
-                "(3, 'Ngũ Hành Sơn', 4.3, 'Ngũ Hành Sơn gồm 5 ngọn núi đá vôi đại diện cho Ngũ Hành, nổi bật với các hang động, chùa chiền và cảnh quan thiên nhiên tuyệt đẹp tại Đà Nẵng.', 40000, '07:00 - 17:00', '0906789012', 'Nature')");
+        db.execSQL("INSERT INTO Places (id_province, Name, Rate, Description, Ticket_price, Time, Phone, Type, Latitude, Longitude) VALUES " +
+                "(3, 'Ngũ Hành Sơn', 4.3, 'Ngũ Hành Sơn gồm 5 ngọn núi đá vôi đại diện cho Ngũ Hành, nổi bật với các hang động, chùa chiền và cảnh quan thiên nhiên tuyệt đẹp tại Đà Nẵng.', 40000, '07:00 - 17:00', '0906789012', 'Thiên nhiên', 16.0022, 108.2630)");
 
-        db.execSQL("INSERT INTO Places (id_province, Name, Rate, Description, Ticket_price, Time, Phone, Type) VALUES " +
-                "(2, 'Suối Tiên', 4.0, 'Suối Tiên là công viên văn hóa nổi tiếng với mô hình kết hợp giữa vui chơi giải trí và truyền thuyết dân gian, phù hợp cho cả gia đình và trẻ em.', 60000, '08:00 - 17:00', '0907890123', 'Amusement')");
+        db.execSQL("INSERT INTO Places (id_province, Name, Rate, Description, Ticket_price, Time, Phone, Type, Latitude, Longitude) VALUES " +
+                "(2, 'Suối Tiên', 4.0, 'Suối Tiên là công viên văn hóa nổi tiếng với mô hình kết hợp giữa vui chơi giải trí và truyền thuyết dân gian, phù hợp cho cả gia đình và trẻ em.', 60000, '08:00 - 17:00', '0907890123', 'Giải trí', 10.8411, 106.8165)");
 
-        db.execSQL("INSERT INTO Places (id_province, Name, Rate, Description, Ticket_price, Time, Phone, Type) VALUES " +
-                "(47, 'Vịnh Hạ Long', 4.9, 'Vịnh Hạ Long là di sản thiên nhiên thế giới được UNESCO công nhận, nổi bật với hàng nghìn đảo đá vôi kỳ vĩ và hệ sinh thái biển phong phú.', 250000, '07:00 - 18:00', '0908901234', 'Nature')");
+        db.execSQL("INSERT INTO Places (id_province, Name, Rate, Description, Ticket_price, Time, Phone, Type, Latitude, Longitude) VALUES " +
+                "(47, 'Vịnh Hạ Long', 4.9, 'Vịnh Hạ Long là di sản thiên nhiên thế giới được UNESCO công nhận, nổi bật với hàng nghìn đảo đá vôi kỳ vĩ và hệ sinh thái biển phong phú.', 250000, '07:00 - 18:00', '0908901234', 'Thiên nhiên', 20.9101, 107.1839)");
+
+        db.execSQL("INSERT INTO Places (id_province, Name, Rate, Description, Ticket_price, Time, Phone, Type, Latitude, Longitude) VALUES " +
+                "(36, 'Sa Pa', 4.7, 'Sa Pa nổi tiếng với cảnh núi non hùng vĩ, ruộng bậc thang và văn hóa dân tộc thiểu số đặc sắc.', 0, '24/7', '02143812345', 'Thiên nhiên', 22.3402, 103.8448)");
+
+        db.execSQL("INSERT INTO Places (id_province, Name, Rate, Description, Ticket_price, Time, Phone, Type, Latitude, Longitude) VALUES " +
+                "(55, 'Đại Nội Huế', 4.6, 'Đại Nội là quần thể di tích cung đình nhà Nguyễn, mang giá trị lịch sử và kiến trúc độc đáo.', 150000, '07:00 - 17:30', '02343845678', 'Văn hóa', 16.4637, 107.5909)");
+
+        db.execSQL("INSERT INTO Places (id_province, Name, Rate, Description, Ticket_price, Time, Phone, Type, Latitude, Longitude) VALUES " +
+                "(44, 'Động Phong Nha', 4.8, 'Một trong những hang động đẹp nhất thế giới với thạch nhũ kỳ ảo, trong vườn quốc gia Phong Nha - Kẻ Bàng.', 150000, '07:00 - 16:30', '02323645678', 'Thiên nhiên', 17.5739, 106.2876)");
+
+        db.execSQL("INSERT INTO Places (id_province, Name, Rate, Description, Ticket_price, Time, Phone, Type, Latitude, Longitude) VALUES " +
+                "(40, 'Khu du lịch Tràng An', 4.9, 'Di sản thiên nhiên và văn hóa thế giới nổi bật với cảnh sông núi kỳ vĩ, hệ thống hang động phong phú.', 250000, '07:00 - 17:00', '02293645678', 'Thiên nhiên', 20.2505, 105.9366)");
+
+        db.execSQL("INSERT INTO Places (id_province, Name, Rate, Description, Ticket_price, Time, Phone, Type, Latitude, Longitude) VALUES " +
+                "(30, 'VinWonders Nha Trang', 4.5, 'Khu vui chơi giải trí hiện đại nằm trên đảo Hòn Tre, nổi bật với cáp treo vượt biển dài nhất Việt Nam.', 880000, '08:30 - 21:00', '02583876543', 'Giải trí', 12.2260, 109.2802)");
+
+        db.execSQL("INSERT INTO Places (id_province, Name, Rate, Description, Ticket_price, Time, Phone, Type, Latitude, Longitude) VALUES " +
+                "(34, 'Thung lũng Tình Yêu', 4.4, 'Khu du lịch thơ mộng tại Đà Lạt với hồ nước, vườn hoa và phong cảnh lãng mạn.', 25000, '07:00 - 17:00', '02633876567', 'Tham quan', 12.0021, 108.0123)");
+
 
         db.execSQL("INSERT INTO Image (id_place, url, caption) VALUES " +
                 "(1, 'https://res.cloudinary.com/dkfzkpsmn/image/upload/v1747449315/cho-ben-thanh-2_iskx3p.jpg', 'Chợ Bến Thành tại TP Hồ Chí Minh')");
@@ -236,11 +212,31 @@ public class DBHelper extends SQLiteOpenHelper {
                 "(7, 'https://res.cloudinary.com/dkfzkpsmn/image/upload/v1747463391/khu_du_lich_suoi_tien_qwevwo.jpg', 'Suối Tiên')");
         db.execSQL("INSERT INTO Image (id_place, url, caption) VALUES " +
                 "(8, 'https://res.cloudinary.com/dkfzkpsmn/image/upload/v1747463441/ha-long_hhj2si.jpg', 'Vịnh Hạ Long')");
+        db.execSQL("INSERT INTO Image (id_place, url, caption) VALUES (9, 'https://res.cloudinary.com/dkfzkpsmn/image/upload/v1747712859/sapa_qlp7dv.jpg', 'Sa Pa')");
+        db.execSQL("INSERT INTO Image (id_place, url, caption) VALUES (10, 'https://res.cloudinary.com/dkfzkpsmn/image/upload/v1747712915/Dai-Noi-Hue-2_upnyiy.jpg', 'Đại Nội Huế')");
+        db.execSQL("INSERT INTO Image (id_place, url, caption) VALUES (11, 'https://res.cloudinary.com/dkfzkpsmn/image/upload/v1747712957/%C4%91%E1%BB%99ng-phong-nha-1_zvtnp2.jpg', 'Động Phong Nha')");
+        db.execSQL("INSERT INTO Image (id_place, url, caption) VALUES (12, 'https://res.cloudinary.com/dkfzkpsmn/image/upload/v1747713004/trang-an-ninh-binh_p66g08.jpg', 'Tràng An')");
+        db.execSQL("INSERT INTO Image (id_place, url, caption) VALUES (13, 'https://res.cloudinary.com/dkfzkpsmn/image/upload/v1747713091/vinwonders-nha-trang-2_bzqmtm.jpg', 'VinWonders Nha Trang')");
+        db.execSQL("INSERT INTO Image (id_place, url, caption) VALUES (14, 'https://res.cloudinary.com/dkfzkpsmn/image/upload/v1747713095/thung_lung_t%C3%ACnh_yeu_tgroup_travel_3_xsg0dx.jpg', 'Thung lũng Tình Yêu')");
+        db.execSQL("INSERT INTO Image (id_place, url, caption) VALUES (15, 'https://res.cloudinary.com/dkfzkpsmn/image/upload/v1747713335/dao-ly-son-banner_f9t2lp.jpg', 'Đảo Lý Sơn')");
+        db.execSQL("INSERT INTO Image (id_place, url, caption) VALUES (16, 'https://res.cloudinary.com/dkfzkpsmn/image/upload/v1747713290/ghenh_da_dia_cg8xgr.jpg', 'Gành Đá Dĩa')");
+        db.execSQL("INSERT INTO Image (id_place, url, caption) VALUES (17, 'https://res.cloudinary.com/dkfzkpsmn/image/upload/v1747713477/dendo_nrqgbs.jpg', 'Đền Đô')");
+        db.execSQL("INSERT INTO Image (id_place, url, caption) VALUES (18, 'https://res.cloudinary.com/dkfzkpsmn/image/upload/v1747713567/tam-dao_by0udq.jpg', 'Tam Đảo')");
+        db.execSQL("INSERT INTO Image (id_place, url, caption) VALUES (19, 'https://res.cloudinary.com/dkfzkpsmn/image/upload/v1747713567/chua-doi_wvs7e2.jpg', 'Chùa Dơi')");
+        db.execSQL("INSERT INTO Image (id_place, url, caption) VALUES (20, 'https://res.cloudinary.com/dkfzkpsmn/image/upload/v1747713702/dien-bien-phu_s59bvq.jpg', 'Chiến trường Điện Biên Phủ')");
+        db.execSQL("INSERT INTO Image (id_place, url, caption) VALUES (21, 'https://res.cloudinary.com/dkfzkpsmn/image/upload/v1747713687/bien-ho_rt4yhv.jpg', 'Biển Hồ')");
+        db.execSQL("INSERT INTO Image (id_place, url, caption) VALUES (22, 'https://res.cloudinary.com/dkfzkpsmn/image/upload/v1747713687/Ma-Pi-Leng_d4vcvu.jpg', 'Đèo Mã Pì Lèng')");
 
-        db.execSQL("INSERT INTO User (username, password, email) VALUES " +
-                "('user1', '123456', 'user1@example.com')," +
-                "('user2', 'abcdef', 'user2@example.com')," +
-                "('user3', 'pass789', 'user3@example.com')");
+        db.execSQL("INSERT INTO Image (id_place, url, caption) VALUES (23, 'https://res.cloudinary.com/dkfzkpsmn/image/upload/v1747713897/buu-long-1_tgnrru.jpg', 'Khu du lịch Bửu Long')");
+        db.execSQL("INSERT INTO Image (id_place, url, caption) VALUES (24, 'https://res.cloudinary.com/dkfzkpsmn/image/upload/v1747713896/%C4%90%E1%BA%A1i-Nam-V%C4%83n-hi%E1%BA%BFn_ygul8b.jpg', 'Đại Nam Văn Hiến')");
+        db.execSQL("INSERT INTO Image (id_place, url, caption) VALUES (25, 'https://res.cloudinary.com/dkfzkpsmn/image/upload/v1747713897/nui-ba-den-tay-ninh-2_ilpz2j.jpg', 'Núi Bà Đen')");
+        db.execSQL("INSERT INTO Image (id_place, url, caption) VALUES (26, 'https://res.cloudinary.com/dkfzkpsmn/image/upload/v1747713898/langnoitanlaplongan01_cguntx.jpg', 'Làng nổi Tân Lập')");
+        db.execSQL("INSERT INTO Image (id_place, url, caption) VALUES (27, 'https://res.cloudinary.com/dkfzkpsmn/image/upload/v1747713990/Cho-Noi-Cai-Be-Tien-_u9pnu4.jpg', 'Chợ nổi Cái Bè')");
+
+        db.execSQL("INSERT INTO User (username, password, phone) VALUES " +
+                "('user1', '123456', '0123')," +
+                "('user2', 'abcdef', '4567')," +
+                "('user3', 'pass789', '8910')");
 
         // Thêm dữ liệu mẫu cho Admin
         db.execSQL("INSERT INTO Admin (name, sdt, password) VALUES " +
@@ -277,6 +273,8 @@ public class DBHelper extends SQLiteOpenHelper {
         values.put("Time", place.getTime());
         values.put("Phone", place.getPhone());
         values.put("Type", place.getType());
+        values.put("Latitude", place.getLatitude());
+        values.put("Longitude", place.getLongitude());
 
         long result = db.insert("Places", null, values);
         return result;
@@ -290,15 +288,17 @@ public class DBHelper extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             do {
                 list.add(new Place(
-                        cursor.getInt(0), // id_place
-                        cursor.getInt(1), // id_province
-                        cursor.getString(2), // Name
-                        cursor.getDouble(3), // Rate
-                        cursor.getString(4), // Description
-                        cursor.getInt(5), // Ticket_price
-                        cursor.getString(6), // Time
-                        cursor.getString(7), // Phone
-                        cursor.getString(8)  // Type
+                        cursor.getInt(0),  // id_place
+                        cursor.getInt(1),  // id_province
+                        cursor.getString(2),  // Name
+                        cursor.getDouble(3),  // Rate
+                        cursor.getString(4),  // Description
+                        cursor.getInt(5),  // Ticket_price
+                        cursor.getString(6),  // Time
+                        cursor.getString(7),  // Phone
+                        cursor.getString(8),  // Type
+                        cursor.getDouble(9),  // Latitude
+                        cursor.getDouble(10) // Longitude
                 ));
             } while (cursor.moveToNext());
         }
@@ -306,21 +306,24 @@ public class DBHelper extends SQLiteOpenHelper {
         return list;
     }
 
+
     public Place getPlaceById(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT * FROM Places WHERE id_place = ?", new String[]{String.valueOf(id)});
 
         if (cursor.moveToFirst()) {
             Place place = new Place(
-                    cursor.getInt(0), // id_place
-                    cursor.getInt(1), // id_province
-                    cursor.getString(2), // Name
-                    cursor.getDouble(3), // Rate
-                    cursor.getString(4), // Description
-                    cursor.getInt(5), // Ticket_price
-                    cursor.getString(6), // Time
-                    cursor.getString(7), // Phone
-                    cursor.getString(8)  // Type
+                    cursor.getInt(0),  // id_place
+                    cursor.getInt(1),  // id_province
+                    cursor.getString(2),  // Name
+                    cursor.getDouble(3),  // Rate
+                    cursor.getString(4),  // Description
+                    cursor.getInt(5),  // Ticket_price
+                    cursor.getString(6),  // Time
+                    cursor.getString(7),  // Phone
+                    cursor.getString(8),  // Type
+                    cursor.getDouble(9),  // Latitude
+                    cursor.getDouble(10) // Longitude
             );
             cursor.close();
             return place;
@@ -369,17 +372,6 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
 
-    // Kiểm tra người dùng có phải admin không từ bảng Admin
-    public boolean isAdmin(String name, String password) {
-        SQLiteDatabase db = this.getReadableDatabase();
-
-        // Kiểm tra người dùng có tồn tại trong bảng Admin
-        Cursor cursor = db.rawQuery("SELECT * FROM Admin WHERE name = ? AND password = ?", new String[]{name, password});
-        boolean isAdmin = cursor.getCount() > 0;
-        cursor.close();
-        return isAdmin;
-    }
-
     public boolean addImage(int placeId, String url) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -416,12 +408,25 @@ public class DBHelper extends SQLiteOpenHelper {
         values.put("Phone", place.getPhone());
         values.put("Type", place.getType());
         values.put("Rate", place.getRate());
+        values.put("Latitude", place.getLatitude());
+        values.put("Longitude", place.getLongitude());
+
         return db.update("Places", values, "id_place=?", new String[]{String.valueOf(place.getIdPlace())});
     }
 
-    public void deleteImagesForPlace(int placeId) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.delete("Image", "id_place=?", new String[]{String.valueOf(placeId)});
+    public Province getProvinceById(int id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Province province = null;
+
+        Cursor cursor = db.rawQuery("SELECT * FROM Province WHERE id_province = ?", new String[]{String.valueOf(id)});
+        if (cursor.moveToFirst()) {
+            String name = cursor.getString(cursor.getColumnIndexOrThrow("name"));
+            province = new Province(id, name);
+        }
+
+        cursor.close();
+        db.close();
+        return province;
     }
 
     public List<String> getImagesForPlace(int placeId) {
@@ -445,5 +450,48 @@ public class DBHelper extends SQLiteOpenHelper {
         db.close();
     }
 
+    public boolean registerUser(String username, String password, String phone) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        if (checkUsernameExists(username)) {
+            return false;
+        }
+
+        ContentValues values = new ContentValues();
+        values.put("username", username);
+        values.put("password", password);
+        values.put("phone", phone);
+
+        long result = db.insert("User", null, values);
+        return result != -1;
+    }
+
+    // Kiểm tra người dùng thường
+    public boolean checkUser(String username, String password) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM User WHERE username = ? AND password = ?", new String[]{username, password});
+        boolean result = cursor.getCount() > 0;
+        cursor.close();
+        return result;
+    }
+
+    // Kiểm tra admin
+    public boolean checkAdmin(String name, String password) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM Admin WHERE name = ? AND password = ?", new String[]{name, password});
+        boolean result = cursor.getCount() > 0;
+        cursor.close();
+        return result;
+    }
+
+
+    public boolean checkUsernameExists(String username) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM User WHERE username=?", new String[]{username});
+        boolean exists = cursor.moveToFirst();
+        cursor.close();
+        return exists;
+    }
 
 }
+

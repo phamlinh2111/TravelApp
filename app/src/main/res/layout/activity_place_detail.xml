@@ -1,90 +1,139 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#F9F9F9">
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <!-- Header: Nút quay lại + Tên địa điểm -->
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="12dp">
+
+            <ImageButton
+                android:id="@+id/btnBack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/arrow_back"
+                android:contentDescription="Quay lại" />
+
+            <TextView
+                android:id="@+id/txtDetailName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Tên địa điểm"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="@color/primaryTextColor"
+                android:paddingStart="12dp" />
+        </LinearLayout>
+
+        <!-- Ảnh -->
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/viewPagerImages"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:layout_marginTop="8dp" />
+            android:layout_height="220dp"
+            android:layout_marginBottom="16dp"
+            android:background="#DDDDDD" />
 
-
-        <!-- Các thông tin chi tiết -->
-        <TextView
-            android:id="@+id/txtDetailName"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:layout_width="wrap_content"
+        <!-- Thông tin chi tiết -->
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:paddingTop="10dp"/>
+            android:padding="12dp"
+            android:background="#FFFFFF"
+            android:layout_marginBottom="12dp">
 
-        <TextView
-            android:id="@+id/txtDetailProvince"
-            android:textSize="18sp"
-            android:paddingTop="8dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/txtDetailProvince"
+                android:text="Tỉnh/Thành"
+                android:textSize="18sp"
+                android:textColor="#757575"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
-        <TextView
-            android:id="@+id/txtDetailRate"
-            android:textSize="18sp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/txtDetailRate"
+                android:text="Đánh giá: 4.5 ★"
+                android:textSize="18sp"
+                android:textColor="#FF9800"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp" />
+        </LinearLayout>
+
+        <!-- Mô tả -->
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Đánh giá:" />
+            android:padding="12dp"
+            android:background="#FFFFFF"
+            android:layout_marginBottom="12dp">
 
-        <TextView
-            android:id="@+id/txtDetailDescription"
-            android:textSize="18sp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/txtDetailDescription"
+                android:text="Mô tả địa điểm du lịch..."
+                android:textSize="18sp"
+                android:textColor="#424242"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <!-- Thông tin liên hệ & khác -->
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Mô tả:" />
+            android:padding="12dp"
+            android:background="#FFFFFF"
+            android:layout_marginBottom="12dp"
+            android:divider="?android:attr/dividerHorizontal"
+            android:showDividers="middle"
+            android:dividerPadding="8dp">
 
-        <TextView
-            android:id="@+id/txtDetailPhone"
-            android:textSize="18sp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Liên hệ:" />
+            <TextView
+                android:id="@+id/txtDetailPhone"
+                android:text="Liên hệ: 0123 456 789"
+                android:textSize="18sp"
+                android:textColor="#424242"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
-        <TextView
-            android:id="@+id/txtDetailType"
-            android:textSize="18sp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Loại hình:" />
+            <TextView
+                android:id="@+id/txtDetailType"
+                android:text="Loại hình: Tham quan"
+                android:textSize="18sp"
+                android:textColor="#424242"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
-        <TextView
-            android:id="@+id/txtDetailTicket"
-            android:textSize="18sp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/txtDetailTicket"
+                android:text="Giá vé: 50.000đ"
+                android:textSize="18sp"
+                android:textColor="#424242"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
-        <TextView
-            android:id="@+id/txtDetailTime"
-            android:textSize="18sp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/txtDetailTime"
+                android:text="Giờ mở cửa: 08:00 - 17:00"
+                android:textSize="18sp"
+                android:textColor="#424242"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
 
     </LinearLayout>
 </ScrollView>

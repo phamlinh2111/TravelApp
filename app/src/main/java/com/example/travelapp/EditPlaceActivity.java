@@ -22,7 +22,7 @@ public class EditPlaceActivity extends AppCompatActivity {
     private static final String CLOUD_NAME = "dkfzkpsmn";
     private static final String UPLOAD_PRESET = "travel_upload_preset";
 
-    EditText edtName, edtDescription, edtTicketPrice, edtRate, edtTime, edtPhone, edtType;
+    EditText edtName, edtDescription, edtTicketPrice, edtRate, edtTime, edtPhone, edtType, edtLatitude, edtLongitude;
     Spinner spinnerProvince;
     Button btnSave, btnSelectImages;
     DBHelper dbHelper;
@@ -46,6 +46,8 @@ public class EditPlaceActivity extends AppCompatActivity {
         edtTime = findViewById(R.id.edtTime);
         edtPhone = findViewById(R.id.edtPhone);
         edtType = findViewById(R.id.edtType);
+        edtLatitude = findViewById(R.id.edtLatitude);
+        edtLongitude = findViewById(R.id.edtLongitude);
         layoutSelectedImages = findViewById(R.id.layoutSelectedImages);
         spinnerProvince = findViewById(R.id.spinnerProvince);
         btnSave = findViewById(R.id.btnSave);
@@ -64,6 +66,8 @@ public class EditPlaceActivity extends AppCompatActivity {
         edtTime.setText(placeToEdit.getTime());
         edtPhone.setText(placeToEdit.getPhone());
         edtType.setText(placeToEdit.getType());
+        edtLatitude.setText(String.valueOf(placeToEdit.getLatitude()));
+        edtLongitude.setText(String.valueOf(placeToEdit.getLongitude()));
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item);
         for (Province p : provinceList) {
@@ -98,6 +102,8 @@ public class EditPlaceActivity extends AppCompatActivity {
             String time = edtTime.getText().toString().trim();
             String phone = edtPhone.getText().toString().trim();
             String type = edtType.getText().toString().trim();
+            String latitudeStr = edtLatitude.getText().toString().trim();
+            String longitudeStr = edtLongitude.getText().toString().trim();
 
             if (name.isEmpty() || desc.isEmpty()) {
                 Toast.makeText(this, "Vui lòng nhập tên và mô tả!", Toast.LENGTH_SHORT).show();
@@ -106,6 +112,8 @@ public class EditPlaceActivity extends AppCompatActivity {
 
             int ticket = ticketStr.isEmpty() ? 0 : Integer.parseInt(ticketStr);
             double rate = rateStr.isEmpty() ? 0 : Double.parseDouble(rateStr);
+            double latitude = latitudeStr.isEmpty() ? 0 : Double.parseDouble(latitudeStr);
+            double longitude = longitudeStr.isEmpty() ? 0 : Double.parseDouble(longitudeStr);
             int provinceId = provinceList.get(spinnerProvince.getSelectedItemPosition()).getId();
 
             placeToEdit.setName(name);
@@ -116,6 +124,8 @@ public class EditPlaceActivity extends AppCompatActivity {
             placeToEdit.setPhone(phone);
             placeToEdit.setType(type);
             placeToEdit.setIdProvince(provinceId);
+            placeToEdit.setLatitude(latitude);
+            placeToEdit.setLongitude(longitude);
 
             int success = dbHelper.updatePlace(placeToEdit);
 
@@ -123,7 +133,7 @@ public class EditPlaceActivity extends AppCompatActivity {
                 // Xóa ảnh cũ đã bị gỡ bỏ
                 for (String oldLink : oldImageLinks) {
                     if (!oldImageLinksToKeep.contains(oldLink)) {
-                        dbHelper.deleteImageByLink(oldLink); // Bạn cần thêm hàm này trong DBHelper
+                        dbHelper.deleteImageByLink(oldLink); // Đảm bảo DBHelper có hàm này
                     }
                 }
 
@@ -194,7 +204,6 @@ public class EditPlaceActivity extends AppCompatActivity {
         btnRemove.setLayoutParams(btnParams);
         btnRemove.setImageResource(R.drawable.close);
 
-        // Bo tròn nút X
         GradientDrawable circleBg = new GradientDrawable();
         circleBg.setColor(0xFFFFFFFF);
         circleBg.setShape(GradientDrawable.OVAL);
@@ -218,8 +227,6 @@ public class EditPlaceActivity extends AppCompatActivity {
         frameLayout.addView(btnRemove);
         return frameLayout;
     }
-
-
 
     private void uploadImageToCloudinary(Uri uri, OnImageUploadedListener listener) {
         try {
