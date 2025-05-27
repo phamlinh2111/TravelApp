@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.location.*;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.util.Log;
 
 import androidx.core.app.ActivityCompat;
 
@@ -26,25 +27,21 @@ public class GpsTracker {
     }
 
     public Location getLocation() {
-        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return null;
-        }
-
         try {
-            if (isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
-                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 1, locationListener);
-                location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                    ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                return null;
             }
 
-            if (location == null && isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, locationListener);
+            if (isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 1, locationListener);
                 location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             }
 
             if (location != null) {
                 latitude = location.getLatitude();
                 longitude = location.getLongitude();
+                Log.d("GPS", "Lat: " + latitude + " - Lon: " + longitude);
             }
 
         } catch (Exception e) {
@@ -55,7 +52,7 @@ public class GpsTracker {
     }
 
     public boolean canGetLocation() {
-        return isProviderEnabled(LocationManager.GPS_PROVIDER) || isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+        return isProviderEnabled(LocationManager.GPS_PROVIDER);
     }
 
     public void showSettingsAlert() {
@@ -69,11 +66,11 @@ public class GpsTracker {
     }
 
     public double getLatitude() {
-        return location != null ? latitude : 0.0;
+        return latitude;
     }
 
     public double getLongitude() {
-        return location != null ? longitude : 0.0;
+        return longitude;
     }
 
     private boolean isProviderEnabled(String provider) {
@@ -86,10 +83,14 @@ public class GpsTracker {
             location = loc;
             latitude = loc.getLatitude();
             longitude = loc.getLongitude();
+            Log.d("GPS", "onLocationChanged - Lat: " + latitude + ", Lon: " + longitude);
         }
 
+        @Override
         public void onStatusChanged(String provider, int status, Bundle extras) {}
+        @Override
         public void onProviderEnabled(String provider) {}
+        @Override
         public void onProviderDisabled(String provider) {}
     };
 }

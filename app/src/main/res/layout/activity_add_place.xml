@@ -168,7 +168,7 @@
             android:text="Tỉnh/Thành phố"
             android:textColor="@color/primaryTextColor"
             android:textSize="18sp"
-            android:layout_marginTop="8dp" />
+            android:layout_marginTop="12dp" />
         <Spinner
             android:id="@+id/spinnerProvince"
             android:layout_width="match_parent"
@@ -182,7 +182,7 @@
             android:text="Chọn ảnh từ thư viện"
             android:textColor="#FFFFFF"
             android:background="@drawable/button"
-            android:layout_marginTop="16dp" />
+            android:layout_marginTop="24dp" />
 
         <!-- Hiển thị ảnh đã chọn -->
         <HorizontalScrollView
@@ -207,7 +207,7 @@
             android:textColor="@android:color/white"
             android:textStyle="bold"
             android:layout_marginTop="16dp"
-            android:layout_marginBottom="24dp" />
+            android:layout_marginBottom="80dp" />
 
     </LinearLayout>
 </ScrollView>
